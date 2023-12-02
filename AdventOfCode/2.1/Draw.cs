@@ -2,9 +2,23 @@
 {
     internal class Draw
     {
-        public required int Red { get; init; }
-        public required int Green { get; init; }
-        public required int Blue { get; init; }
+        public int Red { get;  }
+        public int Green { get; }
+        public int Blue { get; }
+
+        public Draw(string drawLine)
+        {
+            string[] splitDraws = drawLine.Split(", ");
+            foreach (string drawPart in splitDraws)
+            {
+                if (drawPart.Contains("red"))
+                    Red = int.Parse(drawPart.Replace(" red", string.Empty));
+                else if (drawPart.Contains("green"))
+                    Green = int.Parse(drawPart.Replace(" green", string.Empty));
+                else if (drawPart.Contains("blue"))
+                    Blue = int.Parse(drawPart.Replace(" blue", string.Empty));
+            }
+        }
 
         public bool IsPossible(int availableRed, int availableGreen, int availableBlue)
         {

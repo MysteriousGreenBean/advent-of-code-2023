@@ -2,8 +2,22 @@
 {
     internal class Game
     {
-        public required int ID { get; init; }
-        public required Draw[] Draws { get; init; }
+        public int ID { get; }
+        public Draw[] Draws { get; }
+
+        public Game(string line)
+        {
+            string[] splitLines = line.Split(':', ';');
+            ID = int.Parse(splitLines[0].Replace("Game ", string.Empty));
+
+            var draws = new Draw[splitLines.Length - 1];
+            for (int i = 1; i < splitLines.Length; i++)
+            {
+                var draw = new Draw(splitLines[i]);
+                draws[i - 1] = draw;
+            }
+            Draws = draws;
+        }
 
         public bool IsPossible(int availableRed, int availableGreen, int availableBlue)
             => Draws.All(draw => draw.IsPossible(availableRed, availableGreen, availableBlue));
