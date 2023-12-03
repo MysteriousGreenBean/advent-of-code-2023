@@ -9,7 +9,6 @@ const rl = readline.createInterface({
 });
 
 rl.question('Provide path to input file: ', path => {
-	path = "C:\\Users\\Patryk\\Downloads\\input.txt"
 	const input = readInput(path);
 
 	const gearRatios = getGearRatios(input);
