@@ -1,4 +1,4 @@
-﻿namespace _9._1
+﻿namespace _9._2
 {
     internal class Sequence
     {
@@ -9,7 +9,7 @@
             this.RecordedSequence = recordedSequence;
         }
 
-        public int ExtrapolateNextNumber()
+        public int ExtrapolatePreviousNumber()
         {
             var extrapolationSequences = new List<int[]>();
             int[] currentExtrapolationSequence = CalculateNextExtrapolationSequence(this.RecordedSequence);
@@ -21,7 +21,7 @@
                 extrapolationSequences.Add(currentExtrapolationSequence);
             }
 
-            return ExtrapolateNextNumber(extrapolationSequences);
+            return ExtrapolatePreviousNumber(extrapolationSequences);
         }
 
         private int[] CalculateNextExtrapolationSequence(int[] extrapolationSequence)
@@ -32,16 +32,16 @@
             return result;
         }
 
-        private int ExtrapolateNextNumber(List<int[]> extrapolationSequences)
+        private int ExtrapolatePreviousNumber(List<int[]> extrapolationSequences)
         {
             for (int i = extrapolationSequences.Count - 1; i >= 0; i--)
             {
-                extrapolationSequences[i] = extrapolationSequences[i].Append(ExtrapolateNextNumber(extrapolationSequences[i], i == extrapolationSequences.Count - 1 ? null : extrapolationSequences[i + 1])).ToArray();
+                extrapolationSequences[i] = extrapolationSequences[i].Prepend(ExtrapolatePreviousNumber(extrapolationSequences[i], i == extrapolationSequences.Count - 1 ? null : extrapolationSequences[i + 1])).ToArray();
             }
-            return extrapolationSequences[0].Last();
+            return extrapolationSequences[0].First();
         }
 
-        private int ExtrapolateNextNumber(int[] extrapolatedSequence, int[]? lowerExtrapolationSequence)
+        private int ExtrapolatePreviousNumber(int[] extrapolatedSequence, int[]? lowerExtrapolationSequence)
         {
             if (extrapolatedSequence.All(n => n == 0))
                 return 0;
@@ -49,7 +49,7 @@
             if (lowerExtrapolationSequence == null)
                 throw new ArgumentNullException(nameof(lowerExtrapolationSequence));
 
-            return extrapolatedSequence.Last() + lowerExtrapolationSequence.Last();
+            return extrapolatedSequence.First() - lowerExtrapolationSequence.First();
         }
     }
 }
