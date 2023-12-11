@@ -59,7 +59,6 @@
                 default:
                     throw new InvalidOperationException($"Invalid starting pipe field symbol: {this.StartingPipeField.Symbol}");
             }
-            this.PipeFields[row, column].IsPipe = true;
             return this.PipeFields[row, column];
         }
 
