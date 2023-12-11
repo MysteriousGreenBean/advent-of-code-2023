@@ -1,4 +1,4 @@
-﻿namespace _10._1
+﻿namespace _10._2
 {
     internal class PipeMap
     {
@@ -24,8 +24,8 @@
             bool leftFieldConnects = leftField.Symbol == '-' || leftField.Symbol == 'L' || leftField.Symbol == 'F';
             PipeField rightField = PipeFields[startingPipeField!.Row, startingPipeField!.Column + 1];
             bool rightFieldConnects = rightField.Symbol == '-' || rightField.Symbol == 'J' || rightField.Symbol == '7';
-            PipeField topField = PipeFields[startingPipeField!.Row - 1, startingPipeField!.Column];
-            bool topFieldConnects = topField.Symbol == '|' || topField.Symbol == 'F' || topField.Symbol == '7';
+            PipeField? topField = startingPipeField.Row > 0 ? PipeFields[startingPipeField!.Row - 1, startingPipeField!.Column] : null;
+            bool topFieldConnects = topField == null ? false : topField.Symbol == '|' || topField.Symbol == 'F' || topField.Symbol == '7';
             PipeField bottomField = PipeFields[startingPipeField!.Row + 1, startingPipeField!.Column];
             bool bottomFieldConnects = bottomField.Symbol == '|' || bottomField.Symbol == 'J' || bottomField.Symbol == 'L';
 
@@ -59,7 +59,7 @@
                 default:
                     throw new InvalidOperationException($"Invalid starting pipe field symbol: {this.StartingPipeField.Symbol}");
             }
-
+            this.PipeFields[row, column].IsPipe = true;
             return this.PipeFields[row, column];
         }
 
@@ -83,6 +83,21 @@
                 return 'F';
 
             throw new InvalidOperationException($"Invalid connections: {leftFieldConnects}, {rightFieldConnects}, {topFieldConnects}, {bottomFieldConnects}");
+        }
+
+        public PipeField[] GetNeighbours(PipeField pipeField)
+        {
+            var neighbours = new List<PipeField>();
+            if (pipeField.Row > 0)
+                neighbours.Add(this.PipeFields[pipeField.Row - 1, pipeField.Column]);
+            if (pipeField.Row < this.PipeFields.GetLength(0) - 1)
+                neighbours.Add(this.PipeFields[pipeField.Row + 1, pipeField.Column]);
+            if (pipeField.Column > 0)
+                neighbours.Add(this.PipeFields[pipeField.Row, pipeField.Column - 1]);
+            if (pipeField.Column < this.PipeFields.GetLength(1) - 1)
+                neighbours.Add(this.PipeFields[pipeField.Row, pipeField.Column + 1]);
+
+            return neighbours.ToArray();
         }
     }
 }
