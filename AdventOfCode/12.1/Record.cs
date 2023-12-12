@@ -16,11 +16,6 @@
         {
             List<int> questionMarkIndexes = GetAllQuestionMarkIndexes();
             int matchingCombinationsAmount = 0;
-            //foreach (var item in GetCombinations(questionMarkIndexes))
-            //{
-            //    if (IsValid(item))
-            //        matchingCombinationsAmount++;
-            //}
             GetCombinations(questionMarkIndexes).AsParallel().ForAll(combination =>
             {
             if (IsValid(combination))
