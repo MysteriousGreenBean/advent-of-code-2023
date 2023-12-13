@@ -9,7 +9,7 @@
         {
             string[] split = record.Split(' ');
             this.record = split[0];
-            groups = split[1].Split(',').Select(n => int.Parse(n)).ToArray();
+            this.groups = split[1].Split(',').Select(n => int.Parse(n)).ToArray();
         }
 
         public int GetMatchingCombinationsAmount()
