@@ -7,4 +7,4 @@ if (!File.Exists(inputFilePath))
 
 string[] inputLines = File.ReadAllLines(inputFilePath);
 var map = new Map(inputLines);
-Console.WriteLine($"Possible targets: {map.PossibleTargets(6)}");
+Console.WriteLine($"Possible targets: {map.PossibleTargets(64)}");
