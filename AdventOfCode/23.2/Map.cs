@@ -48,30 +48,43 @@
 
             Field currentField = map[start];
             CalculateJunctions(currentField, new HashSet<Field>(), startJunction, 0);
+            int longestPath = FindLongestPath(startJunction, endJunction);
+            return longestPath;
+        }
 
-            
-            var firstPath = new Path();
-            var paths = ExploreJunction(startJunction, firstPath);
+        public int FindLongestPath(Junction startJunction, Junction endJunction)
+        {
+            HashSet<Junction> visited = new HashSet<Junction>();
+            return DFS(startJunction, endJunction, visited);
+        }
 
-            
-            return paths.Where(p => p.Junctions.Last().Coords == end).Max(p => p.GetLength());
+        private int DFS(Junction currentJunction, Junction endJunction, HashSet<Junction> visited)
+        {
+            if (currentJunction == endJunction)
+            {
+                return 0; // Reached the end, no length to add
+            }
+
+            visited.Add(currentJunction);
+
+            int maxLength = int.MinValue;
+
+            foreach (var (neighbor, length) in currentJunction.ConnectedJunctions)
+            {
+                if (!visited.Contains(neighbor))
+                {
+                    int pathLength = DFS(neighbor, endJunction, visited);
+                    maxLength = Math.Max(maxLength, length + pathLength);
+                }
+            }
+
+            visited.Remove(currentJunction);
+
+            return maxLength;
         }
 
         private void CalculateJunctions(Field field, HashSet<Field> visitedFields, Junction sourceJunction, int stepsFromSource)
         {
-            var fieldsToExplore = new Queue<Field>();
-            fieldsToExplore.Enqueue(field);
-
-            //while (fieldsToExplore.Count > 0)
-            //{
-            //    field = fieldsToExplore.Dequeue();
-            //    if (field.Type == FieldType.Forest)
-            //        continue
-            //}
-
-            //if (field.Type == FieldType.Forest)
-            //    return;
-
             int allFieldsToTraverse = map.Values.Count(f => f.Type == FieldType.Path);
 
             var coordsCanMoveInto = new List<Coords>();
@@ -102,7 +115,7 @@
                 sourceJunction.ConnectedJunctions.Add((junction, stepsFromSource));
             }
 
-            if (visitedFields.Count == allFieldsToTraverse) 
+            if (visitedFields.Count == allFieldsToTraverse)
                 return;
             if (visitedFields.Contains(field))
                 return;
