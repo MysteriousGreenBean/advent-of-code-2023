@@ -1,7 +1,7 @@
 ﻿using _24._2;
 
 Console.WriteLine("Provide path to input file:");
-string? inputFilePath = @"C:\Users\pako\Downloads\input.txt";
+string? inputFilePath = Console.ReadLine();
 if (!File.Exists(inputFilePath))
     throw new InvalidDataException("Provided file does not exist");
 
